@@ -34,14 +34,16 @@ public class AppDownloadManager {
 
     private String hint;
     private String authority;
+    private String appName;
 
-    public AppDownloadManager(Activity activity,String hint,String authority) {
+    public AppDownloadManager(Activity activity,String hint,String authority,String appName) {
         weakReference = new WeakReference<Activity>(activity);
         mDownloadManager = (DownloadManager) weakReference.get().getSystemService(Context.DOWNLOAD_SERVICE);
         mDownLoadChangeObserver = new DownloadChangeObserver(new Handler());
         mDownloadReceiver = new DownloadReceiver();
         this.hint = hint;
         this.authority = authority;
+        this.appName = appName;
     }
 
     public void setUpdateListener(OnUpdateListener mUpdateListener) {
@@ -51,7 +53,7 @@ public class AppDownloadManager {
     public void downloadApk(String apkUrl, String title, String desc) {
         // fix bug : 装不了新版本，在下载之前应该删除已有文件
         File temp = weakReference.get().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-        File apkFile = new File(temp, "app_name.apk");
+        File apkFile = new File(temp, appName + ".apk");
 
         Log.i("iven","apk dir is :" + apkFile.getAbsolutePath());
         if (apkFile != null && apkFile.exists()) {
@@ -60,12 +62,12 @@ public class AppDownloadManager {
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
         //设置title
-        request.setTitle("app_name");
+        request.setTitle(appName);
         // 设置描述
         request.setDescription(desc);
         // 完成后显示通知栏
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalFilesDir(weakReference.get(), Environment.DIRECTORY_DOWNLOADS, "app_name.apk");
+        request.setDestinationInExternalFilesDir(weakReference.get(), Environment.DIRECTORY_DOWNLOADS, appName + ".apk");
         //在手机SD卡上创建一个download文件夹
         // Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir() ;
         //指定下载到SD卡的/download/my/目录下
@@ -210,7 +212,7 @@ public class AppDownloadManager {
 //                StrictMode.setVmPolicy(builder.build());
                 uri = FileProvider.getUriForFile(context,
                         authority + ".provider",
-                        new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "app_name.apk"));
+                        new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), appName + ".apk"));
                 intentInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
 

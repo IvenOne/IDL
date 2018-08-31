@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        appDownloadManager = new AppDownloadManager(this,"为了正常升级 [优衣库] APP，请点击设置按钮，允许安装未知来源应用，本功能只限用于 [优衣库] APP版本升级",BuildConfig.APPLICATION_ID);
+        appDownloadManager = new AppDownloadManager(this,"为了正常升级 [优衣库] APP，请点击设置按钮，允许安装未知来源应用，本功能只限用于 [优衣库] APP版本升级",BuildConfig.APPLICATION_ID,"优衣库.apk");
         tv = findViewById(R.id.content);
 
         OkHttpClient client = new OkHttpClient();
