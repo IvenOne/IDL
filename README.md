@@ -22,4 +22,3 @@ Step 2. Add the dependency
 	        implementation 'com.github.IvenOne:IDL:v1.0.0'
 	}
 ```
-Share this release:
